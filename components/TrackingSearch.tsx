@@ -20,7 +20,7 @@ const TrackingSearch: React.FC<TrackingSearchProps> = ({ onSearch, isLoading }) 
   return (
     <div className="bg-white rounded-lg shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] border border-gray-100 p-8 mb-8">
       <div className="flex flex-col gap-4">
-        <h2 className="text-base font-bold text-gray-800">Track Your Parcel</h2>
+        <h2 className="text-base font-bold text-gray-800">Track Your Order</h2>
         
         <div className="flex items-center gap-3">
           <div className="relative flex-1">
