@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import Header from './components/Header';
 import TrackingSearch from './components/TrackingSearch';
 import TrackingDetail from './components/TrackingDetail';
-import { MOCK_TRACKING_DATA, MOCK_DOMESTIC_VN_DATA, MOCK_DOMESTIC_US_DATA, COLORS } from './constants';
+import { MOCK_TRACKING_DATA, MOCK_DOMESTIC_DATA, COLORS } from './constants';
 import { TrackingData } from './types';
 
 const App: React.FC = () => {
@@ -11,15 +11,10 @@ const App: React.FC = () => {
 
   const handleSearch = useCallback((id: string) => {
     setIsLoading(true);
-    // Simulation of lookup logic
+    // Simple mock logic: if the ID starts with 'HK' or is short, show domestic data
     setTimeout(() => {
-      const query = id.toUpperCase();
-      if (query.startsWith('HKVN')) {
-        setTrackingResult(MOCK_DOMESTIC_VN_DATA);
-      } else if (query.startsWith('HKUS')) {
-        setTrackingResult(MOCK_DOMESTIC_US_DATA);
-      } else if (query === 'US-DOMESTIC' || query === 'US') {
-         setTrackingResult(MOCK_DOMESTIC_US_DATA);
+      if (id.startsWith('HK') || id.length < 13) {
+        setTrackingResult(MOCK_DOMESTIC_DATA);
       } else {
         setTrackingResult(MOCK_TRACKING_DATA);
       }
@@ -28,7 +23,7 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Initial load for demonstration
+    // Default load with international for standard view
     handleSearch('YT253370070822578');
   }, [handleSearch]);
 
@@ -37,14 +32,10 @@ const App: React.FC = () => {
       <Header />
       
       <main className="flex-1 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
-        <div className="mb-2 text-center md:text-left flex items-center justify-between">
+        <div className="mb-2 text-center md:text-left">
            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-green-600 bg-green-50 px-3 py-1 rounded-full">
             Logistics Dashboard
           </span>
-          <div className="hidden md:flex gap-4 text-[9px] font-bold text-gray-400">
-            <span>TRY: HKVN88... (Domestic VN)</span>
-            <span>TRY: HKUS77... (Domestic US)</span>
-          </div>
         </div>
         <TrackingSearch onSearch={handleSearch} isLoading={isLoading} />
 
