@@ -1,5 +1,5 @@
 import React from 'react';
-import { Copy, ExternalLink, Globe, ClipboardList, Clock, Calendar } from 'lucide-react';
+import { Copy, ExternalLink, Globe, ClipboardList, Clock, Calendar, Package, Truck, MapPin, Check } from 'lucide-react';
 import { TrackingData } from '../types';
 import TrackingTimeline from './TrackingTimeline';
 
@@ -17,12 +17,25 @@ const TrackingDetail: React.FC<TrackingDetailProps> = ({ data }) => {
   const originName = countryMap[data.origin] || data.origin;
   const destinationName = countryMap[data.destination] || data.destination;
 
+  // Status steps configuration
+  const steps = [
+    { label: 'RECEIVED', icon: <Package size={16} /> },
+    { label: 'PICKED UP', icon: <Truck size={16} /> },
+    { label: 'TRANSIT', icon: <MapPin size={16} /> },
+    { label: 'OUT FOR DELIVERY', icon: <Truck size={16} /> },
+    { label: 'DELIVERED', icon: <Check size={18} /> },
+  ];
+
+  // Since all mock data is "Delivered", we show all as completed.
+  // In a real app, this would be derived from data.deliveryStatus
+  const currentStepIndex = 4; 
+
   return (
     <div className="w-full animate-in fade-in slide-in-from-bottom-2 duration-300">
       <div className="bg-white rounded-xl shadow-[0_4px_20px_-10px_rgba(0,0,0,0.08)] border border-gray-100 overflow-hidden p-8">
         
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-start justify-between mb-10">
+        <div className="flex flex-col md:flex-row md:items-start justify-between mb-8">
           <div className="flex items-start gap-4">
             <div className="bg-green-600 p-3 rounded-lg text-white shadow-md shadow-green-100 mt-1">
               <Calendar size={24} />
@@ -51,8 +64,48 @@ const TrackingDetail: React.FC<TrackingDetailProps> = ({ data }) => {
           </div>
         </div>
 
+        {/* Status Progress Bar */}
+        <div className="mb-12 mt-4 px-4">
+          <div className="relative flex items-center justify-between w-full">
+            {/* Background Line */}
+            <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-100 -translate-y-1/2 rounded-full" />
+            {/* Active Line */}
+            <div 
+              className="absolute top-1/2 left-0 h-1 bg-green-600 -translate-y-1/2 rounded-full transition-all duration-700"
+              style={{ width: `${(currentStepIndex / (steps.length - 1)) * 100}%` }}
+            />
+            
+            {steps.map((step, idx) => {
+              const isActive = idx <= currentStepIndex;
+              const isLast = idx === steps.length - 1;
+              const isCurrent = idx === currentStepIndex;
+
+              return (
+                <div key={idx} className="relative flex flex-col items-center z-10">
+                  <div 
+                    className={`
+                      w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300
+                      ${isActive ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-400'}
+                      ${isCurrent && isLast ? 'ring-8 ring-green-100' : ''}
+                      shadow-sm
+                    `}
+                  >
+                    {step.icon}
+                  </div>
+                  <span className={`
+                    absolute top-12 whitespace-nowrap text-[9px] font-black tracking-wider uppercase
+                    ${isActive ? 'text-green-800' : 'text-gray-400'}
+                  `}>
+                    {step.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Summary Info Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 pt-4">
           <div className="flex flex-col gap-1.5">
             <span className="text-[10px] uppercase font-bold text-gray-400 tracking-widest">Tracking Number</span>
             <p className="text-sm font-bold text-gray-800 tracking-tight">{data.trackingNumber}</p>

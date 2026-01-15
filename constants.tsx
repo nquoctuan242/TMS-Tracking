@@ -63,16 +63,40 @@ export const MOCK_TRACKING_DATA: TrackingData = {
       status: 'Departed from airport'
     },
     {
+      date: 'Monday, December 18, 2023',
+      time: '10:05:00 local time',
+      location: 'SGN Airport',
+      status: 'Arrived at the origin international airport'
+    },
+    {
       date: 'Sunday, December 17, 2023',
       time: '11:20:00 local time',
       location: 'Sort Facility',
-      status: 'Shipment is in transit to next facility'
+      status: 'Order is in transit to next facility'
+    },
+    {
+      date: 'Saturday, December 16, 2023',
+      time: '16:40:00 local time',
+      location: 'Sort Facility',
+      status: 'Departed from sort facility'
+    },
+    {
+      date: 'Friday, December 15, 2023',
+      time: '09:15:00 local time',
+      location: 'Sort Facility',
+      status: 'Arrived at sort facility'
     },
     {
       date: 'Thursday, December 14, 2023',
       time: '15:45:00 local time',
       location: 'Warehouse',
       status: 'Package Picked Up'
+    },
+    {
+      date: 'Thursday, December 14, 2023',
+      time: '08:20:00 local time',
+      location: 'Warehouse',
+      status: 'Packed & Awaiting Pickup'
     },
     {
       date: 'Wednesday, December 13, 2023',
@@ -158,12 +182,6 @@ export const MOCK_DOMESTIC_US_DATA: TrackingData = {
     },
     {
       date: 'Tuesday, January 14, 2025',
-      time: '20:15:00 local time',
-      location: 'NY Distribution Center',
-      status: 'Ready for collection at hub'
-    },
-    {
-      date: 'Monday, January 13, 2025',
       time: '14:20:00 local time',
       location: 'New Jersey Sort Center',
       status: 'Order is in transit to next hub'
