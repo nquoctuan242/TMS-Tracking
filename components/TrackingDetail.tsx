@@ -1,5 +1,5 @@
 import React from 'react';
-import { Copy, ExternalLink, Globe, ClipboardList, Clock, Calendar, Package, Truck, MapPin, Check, FileCheck } from 'lucide-react';
+import { ExternalLink, Globe, Clock, Calendar, Package, Truck, MapPin, Check, FileCheck } from 'lucide-react';
 import { TrackingData } from '../types';
 import TrackingTimeline from './TrackingTimeline';
 
@@ -17,17 +17,16 @@ const TrackingDetail: React.FC<TrackingDetailProps> = ({ data }) => {
   const originName = countryMap[data.origin] || data.origin;
   const destinationName = countryMap[data.destination] || data.destination;
 
-  // Status steps configuration
+  // Status steps configuration matching the requested image
   const steps = [
-    { label: 'RECEIVED', icon: <Package size={16} /> },
-    { label: 'PICKED UP', icon: <Truck size={16} /> },
-    { label: 'TRANSIT', icon: <MapPin size={16} /> },
-    { label: 'OUT FOR DELIVERY', icon: <Truck size={16} /> },
-    { label: 'DELIVERED', icon: <Check size={18} /> },
+    { label: 'RECEIVED', icon: <Package size={18} /> },
+    { label: 'PICKED UP', icon: <Truck size={18} /> },
+    { label: 'TRANSIT', icon: <MapPin size={18} /> },
+    { label: 'OUT FOR DELIVERY', icon: <Truck size={18} /> },
+    { label: 'DELIVERED', icon: <Check size={20} strokeWidth={3} /> },
   ];
 
-  // Since all mock data is "Delivered", we show all as completed.
-  // In a real app, this would be derived from data.deliveryStatus
+  // For mock purposes, we assume fully delivered
   const currentStepIndex = 4; 
 
   return (
@@ -35,14 +34,14 @@ const TrackingDetail: React.FC<TrackingDetailProps> = ({ data }) => {
       <div className="bg-white rounded-xl shadow-[0_4px_20px_-10px_rgba(0,0,0,0.08)] border border-gray-100 overflow-hidden p-8">
         
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-start justify-between mb-8">
+        <div className="flex flex-col md:flex-row md:items-start justify-between mb-10">
           <div className="flex items-start gap-4">
-            <div className="bg-green-600 p-3 rounded-lg text-white shadow-md shadow-green-100 mt-1">
+            <div className="bg-[#005e32] p-3 rounded-lg text-white shadow-md shadow-green-100 mt-1">
               <Calendar size={24} />
             </div>
             <div>
               <div className="flex items-center gap-3">
-                <h2 className="text-2xl font-bold text-green-900 tracking-tight leading-tight">{data.lastEvent}</h2>
+                <h2 className="text-2xl font-bold text-[#004a27] tracking-tight leading-tight">{data.lastEvent}</h2>
               </div>
               <div className="flex items-center gap-1.5 text-[12px] text-green-700 font-semibold mt-1">
                 <Clock size={14} className="text-green-600" />
@@ -64,40 +63,43 @@ const TrackingDetail: React.FC<TrackingDetailProps> = ({ data }) => {
           </div>
         </div>
 
-        {/* Status Progress Bar */}
-        <div className="mb-12 mt-4 px-4">
+        {/* Updated Status Progress Bar */}
+        <div className="mb-16 mt-6 px-8 relative">
           <div className="relative flex items-center justify-between w-full">
-            {/* Background Line */}
-            <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-100 -translate-y-1/2 rounded-full" />
-            {/* Active Line */}
+            {/* Background Base Line */}
+            <div className="absolute top-1/2 left-0 w-full h-[3px] bg-gray-100 -translate-y-1/2 rounded-full" />
+            
+            {/* Active Progress Line */}
             <div 
-              className="absolute top-1/2 left-0 h-1 bg-green-600 -translate-y-1/2 rounded-full transition-all duration-700"
+              className="absolute top-1/2 left-0 h-[3px] bg-[#005e32] -translate-y-1/2 rounded-full transition-all duration-700"
               style={{ width: `${(currentStepIndex / (steps.length - 1)) * 100}%` }}
             />
             
             {steps.map((step, idx) => {
-              const isActive = idx <= currentStepIndex;
-              const isLast = idx === steps.length - 1;
+              const isPast = idx < currentStepIndex;
+              const isDeliveredStep = idx === steps.length - 1;
               const isCurrent = idx === currentStepIndex;
 
               return (
                 <div key={idx} className="relative flex flex-col items-center z-10">
                   <div 
                     className={`
-                      w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300
-                      ${isActive ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-400'}
-                      ${isCurrent && isLast ? 'ring-8 ring-green-100' : ''}
-                      shadow-sm
+                      w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 border-2
+                      ${isDeliveredStep && isCurrent 
+                        ? 'bg-[#005e32] text-white border-[#005e32] shadow-lg shadow-green-100' 
+                        : 'bg-[#ebf3ed] text-[#005e32] border-[#ebf3ed]'}
                     `}
                   >
                     {step.icon}
                   </div>
-                  <span className={`
-                    absolute top-12 whitespace-nowrap text-[9px] font-black tracking-wider uppercase
-                    ${isActive ? 'text-green-800' : 'text-gray-400'}
-                  `}>
-                    {step.label}
-                  </span>
+                  <div className="absolute top-[52px] w-32 flex flex-col items-center">
+                    <span className={`
+                      text-[10px] font-black tracking-tight text-center leading-tight
+                      ${(idx <= currentStepIndex) ? 'text-[#004a27]' : 'text-gray-400'}
+                    `}>
+                      {step.label}
+                    </span>
+                  </div>
                 </div>
               );
             })}
