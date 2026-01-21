@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import TrackingDetail from './components/TrackingDetail';
+import TrackingSearch from './components/TrackingSearch';
 import { MOCK_TRACKING_DATA, MOCK_DOMESTIC_VN_DATA, MOCK_DOMESTIC_US_DATA, COLORS } from './constants';
 import { TrackingData } from './types';
 import { ChevronDown } from 'lucide-react';
@@ -8,19 +9,29 @@ import { ChevronDown } from 'lucide-react';
 const App: React.FC = () => {
   const [trackingResult, setTrackingResult] = useState<TrackingData | null>(null);
   const [selectedId, setSelectedId] = useState('YT253370070822578');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     handleSwitch(selectedId);
   }, [selectedId]);
 
   const handleSwitch = (id: string) => {
-    if (id === 'HKVN88220011') {
-      setTrackingResult(MOCK_DOMESTIC_VN_DATA);
-    } else if (id === 'HKUS77110022') {
-      setTrackingResult(MOCK_DOMESTIC_US_DATA);
-    } else {
-      setTrackingResult(MOCK_TRACKING_DATA);
-    }
+    setIsLoading(true);
+    // Simulate API delay
+    setTimeout(() => {
+      if (id === 'HKVN88220011') {
+        setTrackingResult(MOCK_DOMESTIC_VN_DATA);
+      } else if (id === 'HKUS77110022') {
+        setTrackingResult(MOCK_DOMESTIC_US_DATA);
+      } else {
+        setTrackingResult(MOCK_TRACKING_DATA);
+      }
+      setIsLoading(false);
+    }, 600);
+  };
+
+  const handleSearch = (id: string) => {
+    setSelectedId(id);
   };
 
   return (
@@ -50,7 +61,7 @@ const App: React.FC = () => {
             {/* Selection Box */}
             <div className="flex flex-col gap-1 w-full md:w-80">
               <label htmlFor="tracking-select" className="text-[9px] font-bold text-white/70 uppercase tracking-widest ml-1">
-                Select Tracking Number
+                Quick Selection (Demo)
               </label>
               <div className="relative">
                 <select 
@@ -75,7 +86,10 @@ const App: React.FC = () => {
       
       <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
         <div className="space-y-6">
-          {trackingResult ? (
+          {/* Tracking Search Component */}
+          <TrackingSearch onSearch={handleSearch} isLoading={isLoading} />
+
+          {trackingResult && !isLoading ? (
             <TrackingDetail data={trackingResult} />
           ) : (
             <div className="bg-white rounded-2xl border border-dashed border-gray-200 py-32 flex flex-col items-center justify-center text-center">

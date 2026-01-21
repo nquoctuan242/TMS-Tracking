@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { CheckCircle2, MapPin, ClipboardList } from 'lucide-react';
+import { CheckCircle2, MapPin, Clock, ClipboardList } from 'lucide-react';
 import { TrackingEvent } from '../types';
 import { COLORS } from '../constants';
 
@@ -32,27 +32,32 @@ const TrackingTimeline: React.FC<TrackingTimelineProps> = ({ history }) => {
 
             {/* Event Content */}
             <div className={`pb-8 flex-1`}>
-              <div className="flex justify-between items-start gap-4">
+              <div className="flex flex-col gap-1.5">
                 <div>
-                  <h4 className={`text-sm font-bold ${isFirst ? 'text-green-800' : 'text-gray-700'}`}>
+                  <h4 className={`text-sm font-bold tracking-tight ${isFirst ? 'text-[#004a27]' : 'text-[#334155]'}`}>
                     {event.status}
                   </h4>
-                  <p className="text-[11px] text-gray-400 font-medium mt-0.5">{event.date}</p>
                 </div>
                 
-                <div className="flex items-center gap-2 text-[11px] text-gray-400 whitespace-nowrap pt-1">
-                  <div className="flex items-center gap-1">
-                    <MapPin size={12} className="text-gray-300" />
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center gap-2 text-[13px] text-gray-500 font-medium">
+                    <MapPin size={14} className="text-gray-300" />
                     <span>{event.location}</span>
                   </div>
-                  <span className="text-gray-200">|</span>
-                  <span>{event.time}</span>
+                  <div className="flex items-center gap-2 text-[13px] text-gray-400 font-normal">
+                    <Clock size={14} className="text-gray-300" />
+                    <div className="flex items-center gap-1.5">
+                      <span>{event.date}</span>
+                      <span className="text-gray-200">|</span>
+                      <span>{event.time.split(' ')[0]}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               {isFirst && (
-                <div className="mt-4 p-4 bg-[#f1f9f5] rounded-lg border border-[#e0f2e9] flex items-start gap-3">
-                  <div className="bg-white p-1.5 rounded-md shadow-sm">
+                <div className="mt-5 p-4 bg-[#f1f9f5] rounded-lg border border-[#e0f2e9] flex items-start gap-3 max-w-2xl">
+                  <div className="bg-white p-1.5 rounded-md shadow-sm mt-0.5">
                     <ClipboardList className="text-green-600" size={14} />
                   </div>
                   <p className="text-[11px] text-green-800 leading-relaxed font-medium">

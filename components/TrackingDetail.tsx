@@ -1,5 +1,5 @@
 import React from 'react';
-import { Copy, ExternalLink, Globe, ClipboardList, Clock, Calendar, Package, Truck, MapPin, Check } from 'lucide-react';
+import { Copy, ExternalLink, Globe, ClipboardList, Clock, Calendar, Package, Truck, MapPin, Check, FileCheck } from 'lucide-react';
 import { TrackingData } from '../types';
 import TrackingTimeline from './TrackingTimeline';
 
@@ -56,7 +56,7 @@ const TrackingDetail: React.FC<TrackingDetailProps> = ({ data }) => {
           
           <div className="flex gap-2 mt-4 md:mt-0">
             <button className="flex items-center gap-1.5 text-[11px] font-bold text-gray-600 bg-gray-50 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all border border-gray-100">
-              <ClipboardList size={14} /> Copy History
+              <FileCheck size={14} /> View POD
             </button>
             <button className="flex items-center gap-1.5 text-[11px] font-bold text-gray-600 bg-gray-50 hover:bg-gray-100 px-4 py-2 rounded-lg transition-all border border-gray-100">
               <ExternalLink size={14} /> Copy Link
